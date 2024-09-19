@@ -1,4 +1,6 @@
-import { Canvas } from "@react-three/fiber";
+import { Canvas, useFrame } from "@react-three/fiber";
+import { useRef } from "react";
+import * as THREE from "three";
 
 type CubeProps = {
   posi: [number, number, number];
@@ -6,8 +8,13 @@ type CubeProps = {
   scale: [number, number, number];
 };
 const Cube = ({ posi, color, scale }: CubeProps) => {
+  const ref = useRef<THREE.Mesh>(null!);
+  useFrame((state, delta) => {
+    ref.current.rotation.x += delta;
+    ref.current.rotation.y += delta;
+  });
   return (
-    <mesh position={posi}>
+    <mesh position={posi} ref={ref}>
       <boxGeometry args={scale} />
       <meshStandardMaterial color={color} />
     </mesh>
